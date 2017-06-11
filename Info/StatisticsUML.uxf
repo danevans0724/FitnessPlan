@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>198</x>
+      <y>288</y>
+      <w>279</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+BodyStat
+--
+- Date measureDate
+- List&lt;Measurement&gt; statValue
+- String desc
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>108</x>
+      <y>9</y>
+      <w>189</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+IStat
+--
+public String getStatDesc()
+public void setStatDesc()
+public List&lt;IStat&gt; getStats()
+public Date getStatDate()
+public void setStatDate()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>126</y>
+      <w>126</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+implements</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>423</x>
+      <y>9</y>
+      <w>144</w>
+      <h>171</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+Measurement
+--
+- String name
+- Double value
+- MEASUREMENT_SYSTEM system
+- UNITS units
+--
+getName()
+setName()
+getValue()
+setValue()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>171</y>
+      <w>108</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;instantiates&gt;&gt;</panel_attributes>
+    <additional_attributes>20.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>549</x>
+      <y>288</y>
+      <w>189</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Class&gt;&gt;
+StatTypeList
+
+--
+-List&lt;String&gt; statType
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>468</x>
+      <y>315</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;used by&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
+  </element>
+</diagram>

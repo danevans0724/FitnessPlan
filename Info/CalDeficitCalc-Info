@@ -1,0 +1,73 @@
+Calorie Deficit Calculator
+---------------------------------------------------------
+
+Purpose:
+Aid a user in calculating their Basal Metabolic Rate (BMR) and a calorie 
+deficit that will aid them in achieving a specific weight goal.
+
+Use Case:
+The user provides information that is used in the calculation of BMR. 
+Specifically:
+   Sex (Male or Female)
+   Weight (Pounds or Kilograms)
+   Age (years) or birth date
+   Height (Inches or centimeters)
+   Units of measure (English or Metric)
+   Plan Starting Date
+   Current Date (for purposes of tracking progress)
+   Goal Date
+   Goal Weight (Pounds or Kilograms)   
+   The number of planned exercise days per week.
+   The expected number of calories burned per workout. 
+
+ Given the information provided, the program calculates the users BMR and BMI.
+ Given the Start and goal dates, the program calculates the number of 
+ weeks in the plan. Using this number, the program calculates the 
+ amount of weight the user would need to lose per week in order to 
+ achieve the goal. It also provides a suggested caloric intake per day 
+ that will help achieve the goal. Sliders or spinners are provided to 
+ allow the user to adjust the work out days / week or exercise intensity,
+ (in calories / work out), in order to help them achieve the goal.
+ 
+ Algorithm:
+ Provide a GUI interface with date pickers, text input boxes, spinners 
+ and / or sliders that allow user input. Provide a class for BMR and a
+ class for caloric deficit.
+ 
+   1. The *user* enters his/ her name into the name box.
+   2. The user enters current height and weight *statistics*.
+   3. The user enters a target weight and if desired a target date
+      or the amount of weight to lose each week of the *plan*.
+        If a target date is provided then the caloric loss / week is
+       calculates to fit the number of weeks from the present day.
+        On the contrary, if an amount of weight to lose per week is provided,
+       the system calculates the date on which the user will realize their goal.
+   4. The user provides their gender by selecting the appropriate radio button.
+   5. The user clicks a radio button that describes their current activity level.
+   6. When the user clicks the calculate button, the system double checks the input
+      and calculates the resultant figures and displays them in a *report window*.
+   7. When the user adjusts, weight loss / week, target weight, or completion date, 
+      the system recalculates and reports the results. 
+      
+Objects:
+  User - The person creating the plan. Owns the personal statistics in the data
+         model (CalcDeficitDatamodel).
+  CalcDeficitDatamodel -  Stores, acts upon the user's statistics to provide the result.
+  CalcDeficitPlan - The resulting weight loss plan based on calculated BMR and target
+                    weight.
+  CalcDeficitReportPnl - The panel that provides the resulting calculations based on 
+                         the user's statistics.
+  CalcDeficitMainFrame - The programs main window. It contains the input and report panels.
+  CalcDeficitInputPnl  - The panel in which the user enters statistics.
+  
+   
+   
+ Potential enhancements:
+ * Allow the user to pick exercises to create a plan for workouts. Use the 
+   selected exercises to calculate the caloric burn.
+ * Save the user's plan to disk and provide a method for retrieval.
+ * Provide the user to report weekly weight results and have the completion estimate
+   adjusted in the report view, based on the actual results. 
+ * Provide entry points for skin fold caliper measurements and calculation of body 
+   fat percentage. (Could this be correlated to BMI in some way? Answer: YES! See IE favorites.)
+    

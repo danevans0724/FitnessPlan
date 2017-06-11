@@ -1,0 +1,9 @@
+package com.evansnet.FitnessPlan;
+
+public enum ACTIVITY_LEVEL {
+	SEDENTARY, 
+	LIGHT_EXERCISE, 
+	MODERATE_EXERCISE, 
+	HEAVY_EXERCISE, 
+	VERYHEAVY_EXERCISE
+}
