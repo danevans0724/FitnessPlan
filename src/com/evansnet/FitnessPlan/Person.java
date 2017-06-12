@@ -7,6 +7,7 @@ import com.evansnet.measurement.MEASUREMENT_SYSTEM;
 
 public class Person implements IPerson, IGender {
 
+	protected String name;				// The name of the person.
 	protected SEX gender; 
 	protected Double startWeight;
 	protected Double currentWeight;
@@ -110,6 +111,14 @@ public class Person implements IPerson, IGender {
 	
 	public void setStartWeight(Double w) {
 		startWeight = w;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String n) {
+		name = n;
 	}
 	
 	public Double getStartWeight() {
@@ -219,5 +228,7 @@ public class Person implements IPerson, IGender {
 		calcBMI();
 		return this.bmi;
 	}
-
+	
+	//Bindings 
+	
 }

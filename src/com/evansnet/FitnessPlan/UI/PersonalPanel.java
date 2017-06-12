@@ -1,11 +1,14 @@
 package com.evansnet.FitnessPlan.UI;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import java.awt.Insets;
 
 import javax.swing.ButtonGroup;
@@ -13,12 +16,13 @@ import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PersonalPanel extends JPanel implements ItemListener {
+public class PersonalPanel extends JPanel implements ActionListener, ItemListener {
 
 	private static final long serialVersionUID = 1L;
 	JLabel lblName;
@@ -58,9 +62,8 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		
 		JPanel personPanel = new JPanel();
 		GridBagConstraints gbc_personPanel = new GridBagConstraints();
-		gbc_personPanel.anchor = GridBagConstraints.NORTH;
 		gbc_personPanel.insets = new Insets(0, 0, 0, 5);
-		gbc_personPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_personPanel.fill = GridBagConstraints.BOTH;
 		gbc_personPanel.gridx = 0;
 		gbc_personPanel.gridy = 0;
 		add(personPanel, gbc_personPanel);
@@ -86,6 +89,7 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		gbc_txtName.gridy = 0;
 		gbc_txtName.gridwidth = 4;
 		personPanel.add(txtName, gbc_txtName);
+		txtName.addActionListener(this);
 		
 		lblBirthDate = new JLabel("Birth Date: ");
 		GridBagConstraints gbc_lblBirthDate = new GridBagConstraints();
@@ -102,6 +106,7 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		gbc_birthDate.gridy = 1;
 		gbc_birthDate.gridwidth = 3;
 		personPanel.add(txtBirthDate, gbc_birthDate);
+		txtBirthDate.addActionListener(this);
 		
 		lblGender = new JLabel("Gender: ");
 		GridBagConstraints gbc_lblGender = new GridBagConstraints();
@@ -151,6 +156,7 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		gbc_txtstartWgt.gridx = 1;
 		gbc_txtstartWgt.gridy = 4;
 		personPanel.add(txtStartWgt, gbc_txtstartWgt);
+		txtStartWgt.addActionListener(this);
 		
 		lblTargetWgt = new JLabel("Target Weight");
 		GridBagConstraints gbc_targetWgt = new GridBagConstraints();
@@ -166,6 +172,7 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		gbc_txtTargetWgt.gridx = 3;
 		gbc_txtTargetWgt.gridy = 4;
 		personPanel.add(txtTargetWgt, gbc_txtTargetWgt);
+		txtTargetWgt.addActionListener(this);
 		
 		lblCurrentWgt = new JLabel("Current Weight");
 		GridBagConstraints gbc_currentWgt = new GridBagConstraints();
@@ -181,18 +188,21 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		gbc_txtCurrenWgt.gridx = 1;
 		gbc_txtCurrenWgt.gridy = 5;
 		personPanel.add(txtCurrentWgt, gbc_txtCurrenWgt);
+		txtCurrentWgt.addActionListener(this);
 		
 		btnOK = new JButton("OK");
 		GridBagConstraints gbc_btnOK = new GridBagConstraints();
 		gbc_btnOK.gridx = 3;
 		gbc_btnOK.gridy = 7;
 		personPanel.add(btnOK, gbc_btnOK);
+		btnOK.addActionListener(this);
 		
 		btnCancel = new JButton("Cancel");
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
 		gbc_btnCancel.gridx = 4;
 		gbc_btnCancel.gridy = 7;
 		personPanel.add(btnCancel, gbc_btnCancel);
+		btnCancel.addActionListener(this);
 	}
 
 
@@ -202,8 +212,7 @@ public class PersonalPanel extends JPanel implements ItemListener {
 			statsLogger.log(Level.INFO, "Male gender selected");
 			
 		} else if (genderEvent.getSource() == rd_female) {
-			statsLogger.log(Level.INFO, "Female gender selected");
-			
+			statsLogger.log(Level.INFO, "Female gender selected");			
 		}
 	}
 	
@@ -214,6 +223,8 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		} else if (e.getSource() == btnCancel) {
 			statsLogger.log(Level.INFO, "Clearing controls.");
 			doClearCtrl();
+		} else if (e.getSource() == txtName) {
+			setDirty(true);
 		}
 	}
 
@@ -242,7 +253,16 @@ public class PersonalPanel extends JPanel implements ItemListener {
 	 */
 	private void doAddPerson() {
 		statsLogger.log(Level.INFO, "Checking for existence of user " + txtName.getText());
-		doCheckExistingUser(txtName.getText());
+		if (isDirty()) {
+			if (doCheckExistingUser(txtName.getText())) {
+				setDirty(false);
+				JOptionPane.showMessageDialog(this, "User already exists in the tree!");
+			} else {
+				DefaultMutableTreeNode newPerson = new DefaultMutableTreeNode();
+				// Fire an add person to the tree event. I need to write the event and listener.
+			}
+			
+		}
 	}
 
 	/**
@@ -254,8 +274,23 @@ public class PersonalPanel extends JPanel implements ItemListener {
 		return false;		//TODO: Implement the doCheckExistingUser method.
 	}
 	
+	/**
+	 * If the UI has been updated, set this to true. Binding of data back to the model can be 
+	 * done at that point
+	 * @param b True or False - True if the panel has been edited.
+	 * 
+	 */
 	private void setDirty(boolean b) {
 		isDirty = b;
 		statsLogger.log(Level.INFO, "UI is dirty.");
+	}
+	
+	/**
+	 * Returns the edit status of the panel. If dirty, there is new 
+	 * changes or additions to save.
+	 * @return The status of the panel. True if edits have been made.
+	 */
+	public boolean isDirty() {
+		return isDirty;
 	}
 }

@@ -41,6 +41,22 @@ public class Fitness extends JFrame {
 		});
 	}
 
+	public DefaultMutableTreeNode getTreeRoot() {
+		return treeRoot;
+	}
+
+	public void setTreeRoot(DefaultMutableTreeNode treeRoot) {
+		this.treeRoot = treeRoot;
+	}
+
+	public JTree getPersonTree() {
+		return personTree;
+	}
+
+	public void setPersonTree(JTree personTree) {
+		this.personTree = personTree;
+	}
+
 	/**
 	 * Create the main window frame and controls.
 	 */
