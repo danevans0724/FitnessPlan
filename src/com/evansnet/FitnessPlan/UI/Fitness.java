@@ -8,18 +8,34 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.event.ActionListener;
+
+import com.evansnet.FitnessPlan.FemalePerson;
+import com.evansnet.FitnessPlan.MalePerson;
+import com.evansnet.FitnessPlan.Person;
+import com.evansnet.FitnessPlan.UI.menu.FPMainMenu;
 import javax.swing.JMenuBar;
 import javax.swing.ScrollPaneLayout;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.JTree;
 
-public class Fitness extends JFrame {
+public class Fitness extends JFrame implements Observer {
 	
 	//Temporary array to fill the tree.
 	List<String> people;
 	DefaultMutableTreeNode treeRoot;
 	JTree personTree;
+	PersonalPanel pPerson;
+	StatsPanel pStats;
+	
+	FPMainMenu mainMenus;
+	ActionListener menuListener;
+	
+	Person thePerson;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -67,7 +83,13 @@ public class Fitness extends JFrame {
 		
 		JMenuBar menuBarMain = new JMenuBar();
 		setJMenuBar(menuBarMain);
-
+		
+		mainMenus = new FPMainMenu();
+		
+		mainMenus.addObserver(this);
+		menuBarMain.add(mainMenus.getPersonMenu());
+		menuBarMain.add(mainMenus.getHelpMenu());
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,11 +108,11 @@ public class Fitness extends JFrame {
 		populateTree();
 		
 		// Set the center panel for editing people
-		PersonalPanel pPerson = new PersonalPanel();
+		pPerson = new PersonalPanel();
 		contentPane.add(pPerson, BorderLayout.CENTER);
 		
 		// Show the panel that contains the BMR and BMI 
-		StatsPanel pStats = new StatsPanel();
+		pStats = new StatsPanel();
 		contentPane.add(pStats, BorderLayout.EAST);	
 	}
 	
@@ -110,4 +132,84 @@ public class Fitness extends JFrame {
 			treeRoot.add(new DefaultMutableTreeNode(p));
 		}
 	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		String selected = mainMenus.getSelectedMenuItem();
+		
+		//Perform an action based on the menu selected
+		switch(selected) {
+		case "ADD_PERSON":
+			doNewPerson();
+			break;
+		case "GET_PERSON":
+			doGetPerson();
+			break;
+		case "SAVE_PERSON":
+			doSavePerson();
+			break;
+		case "DELETE_PERSON":
+			doDeletePerson();
+			break;
+		case "HELP_CONTENTS":
+			break;			//Do nothing for now.
+		case "HELP_ABOUT":
+			break;			//TODO: Write the help system and do the help about dialog.
+		case "QUIT":
+			doExit();
+			break;
+		}
+	}
+	
+	/**
+	 * Find the person in the system and remove the record. Remove
+	 * the person from the tree.
+	 */
+	private void doDeletePerson() {
+		// TODO Auto-generated method stub
+		System.out.println("Deleting a person!");
+	}
+	
+	/** 
+	 * Save the person's data to storage and add the name to the tree.
+	 */
+	private void doSavePerson() {
+		// TODO Auto-generated method stub
+		System.out.println("Saving a person!");
+	}
+	
+	/**
+	 * Do this when the menu item is selected or when a person is clicked in the tree.
+	 */
+	private void doGetPerson() {
+		// TODO Auto-generated method stub
+		System.out.println("Getting a person! (From where?)");
+	}
+
+	/**
+	 * Handles the request to exit the application.
+	 */
+	private void doExit() {
+		Runtime.getRuntime().exit(0);
+		//System.exit();	//Alternate method. Keep this handy.
+	}
+	
+	/**
+	 * Handles the creation of a new person. Synchronizes the model and 
+	 * the display in preparation for the save.
+	 */
+	private void doNewPerson() {
+		if (pPerson.rd_male.isSelected()) {
+			thePerson = new MalePerson();
+		} else if (pPerson.rd_female.isSelected()) {
+			thePerson = new FemalePerson();
+		} 
+		
+		
+	}
+	
+	private void syncModel() {
+		System.out.println("Synchronizing the model and GUI.");
+	}
+	
 }

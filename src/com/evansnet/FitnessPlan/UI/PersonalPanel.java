@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import java.awt.Insets;
@@ -43,6 +45,8 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	boolean isDirty;
 	JButton btnCancel;
 	
+	DocumentListener docChgListener;
+	
 	Logger statsLogger = Logger.getLogger("StatsLogger");
 
 	/**
@@ -57,6 +61,31 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		gridBagLayout.columnWeights = new double[]{1.0};
 		gridBagLayout.rowWeights = new double[]{0.0};
 		setLayout(gridBagLayout);
+		
+		// Handle changes to the text controls in order to set dirty flag.
+		docChgListener = new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				String ctrl = getControlName(e);
+					setDirty(true);
+					// TODO: enable the save menu item. Of course I have to write it first!
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				String ctrl = getControlName(e);
+					setDirty(true);
+					// TODO: enable the save menu item. Of course I have to write it first!
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				String ctrl = getControlName(e);
+				setDirty(true);
+					// TODO: enable the save menu item. Of course I have to write it first!
+			}
+			
+		};
 		
 		ButtonGroup bgGender = new ButtonGroup();
 		
@@ -89,7 +118,9 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		gbc_txtName.gridy = 0;
 		gbc_txtName.gridwidth = 4;
 		personPanel.add(txtName, gbc_txtName);
-		txtName.addActionListener(this);
+		txtName.setName("NAME");
+		txtName.getDocument().addDocumentListener(docChgListener);
+		txtName.getDocument().putProperty("owner", txtName);
 		
 		lblBirthDate = new JLabel("Birth Date: ");
 		GridBagConstraints gbc_lblBirthDate = new GridBagConstraints();
@@ -100,13 +131,15 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		personPanel.add(lblBirthDate, gbc_lblBirthDate);
 		
 		txtBirthDate = new JTextField();
+		txtBirthDate.setName("BIRTHDATE");
+		txtBirthDate.getDocument().addDocumentListener(docChgListener);
+		txtBirthDate.getDocument().putProperty("owner", txtBirthDate);
 		GridBagConstraints gbc_birthDate = new GridBagConstraints();
 		gbc_birthDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_birthDate.gridx = 1;
 		gbc_birthDate.gridy = 1;
 		gbc_birthDate.gridwidth = 3;
 		personPanel.add(txtBirthDate, gbc_birthDate);
-		txtBirthDate.addActionListener(this);
 		
 		lblGender = new JLabel("Gender: ");
 		GridBagConstraints gbc_lblGender = new GridBagConstraints();
@@ -151,12 +184,15 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		personPanel.add(lblStartWgt, gbc_startWgt);
 		
 		txtStartWgt = new JTextField();
+		txtStartWgt.setName("STARTWGT");
+		txtStartWgt.getDocument().putProperty("owner", txtStartWgt);
+		txtStartWgt.getDocument().addDocumentListener(docChgListener);
 		GridBagConstraints gbc_txtstartWgt = new GridBagConstraints();
 		gbc_txtstartWgt.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtstartWgt.gridx = 1;
 		gbc_txtstartWgt.gridy = 4;
 		personPanel.add(txtStartWgt, gbc_txtstartWgt);
-		txtStartWgt.addActionListener(this);
+		
 		
 		lblTargetWgt = new JLabel("Target Weight");
 		GridBagConstraints gbc_targetWgt = new GridBagConstraints();
@@ -167,12 +203,14 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		personPanel.add(lblTargetWgt, gbc_targetWgt);
 		
 		txtTargetWgt = new JTextField();
+		txtTargetWgt.setName("TARGETWGT");
+		txtTargetWgt.getDocument().addDocumentListener(docChgListener);
+		txtTargetWgt.getDocument().putProperty("owner", txtTargetWgt);
 		GridBagConstraints gbc_txtTargetWgt = new GridBagConstraints();
 		gbc_txtTargetWgt.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtTargetWgt.gridx = 3;
 		gbc_txtTargetWgt.gridy = 4;
 		personPanel.add(txtTargetWgt, gbc_txtTargetWgt);
-		txtTargetWgt.addActionListener(this);
 		
 		lblCurrentWgt = new JLabel("Current Weight");
 		GridBagConstraints gbc_currentWgt = new GridBagConstraints();
@@ -183,12 +221,14 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		personPanel.add(lblCurrentWgt, gbc_currentWgt);
 		
 		txtCurrentWgt = new JTextField();
+		txtCurrentWgt.setName("CURRENTWGT");
+		txtCurrentWgt.getDocument().addDocumentListener(docChgListener);
+		txtCurrentWgt.getDocument().putProperty("owner", txtCurrentWgt);
 		GridBagConstraints gbc_txtCurrenWgt = new GridBagConstraints();
 		gbc_txtCurrenWgt.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtCurrenWgt.gridx = 1;
 		gbc_txtCurrenWgt.gridy = 5;
 		personPanel.add(txtCurrentWgt, gbc_txtCurrenWgt);
-		txtCurrentWgt.addActionListener(this);
 		
 		btnOK = new JButton("OK");
 		GridBagConstraints gbc_btnOK = new GridBagConstraints();
@@ -203,6 +243,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		gbc_btnCancel.gridy = 7;
 		personPanel.add(btnCancel, gbc_btnCancel);
 		btnCancel.addActionListener(this);
+		
 	}
 
 
@@ -210,23 +251,40 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	public void itemStateChanged(ItemEvent genderEvent) {
 		if (genderEvent.getSource() == rd_male) {
 			statsLogger.log(Level.INFO, "Male gender selected");
+			setDirty(true);
 			
 		} else if (genderEvent.getSource() == rd_female) {
-			statsLogger.log(Level.INFO, "Female gender selected");			
-		}
-	}
-	
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnOK) {
-			statsLogger.log(Level.INFO, "Adding / changing a person.");
-			doAddPerson();
-		} else if (e.getSource() == btnCancel) {
-			statsLogger.log(Level.INFO, "Clearing controls.");
-			doClearCtrl();
-		} else if (e.getSource() == txtName) {
+			statsLogger.log(Level.INFO, "Female gender selected");	
 			setDirty(true);
 		}
 	}
+	
+	//Handle the OK and cancel button clicks.
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnOK) {
+			statsLogger.log(Level.INFO, "Adding / changing a person.");
+			if (!isPersonExists(txtName.getText())) {		//TODO: Write the checkPerson routine.
+				doAddPerson();
+			} else {
+				doUpdatePerson();
+			}
+		} else if (e.getSource() == btnCancel) {
+			statsLogger.log(Level.INFO, "Clearing controls.");
+			doClearCtrl();
+		}
+	}
+	
+	/**
+	 * Checks persistent storage and determines if the person is 
+	 * already in the system. 
+	 * 
+	 * @return True if the person record exists, false otherwise.
+	 */
+	private boolean isPersonExists(String name) {
+		// TODO Write the routine to check for an existing person in storage. Determines add or edit.
+		return false;
+	}
+
 
 	/**
 	 * Cancels the operation and clears all of the controls. Sets
@@ -261,8 +319,15 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 				DefaultMutableTreeNode newPerson = new DefaultMutableTreeNode();
 				// Fire an add person to the tree event. I need to write the event and listener.
 			}
-			
 		}
+	}
+	
+	/** 
+	 * Performs an update of the existing person record based on the values
+	 * in the panel's controls.
+	 */
+	private void doUpdatePerson() {
+		//TODO: Write the doUpdatePerson() method.
 	}
 
 	/**
@@ -271,6 +336,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 * @return <b>boolean</b>: true if the user is found, false otherwise
 	 */
 	private boolean doCheckExistingUser(String text) {
+		this.getParent();
 		return false;		//TODO: Implement the doCheckExistingUser method.
 	}
 	
@@ -282,7 +348,11 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 */
 	private void setDirty(boolean b) {
 		isDirty = b;
-		statsLogger.log(Level.INFO, "UI is dirty.");
+		if (isDirty) {
+			statsLogger.log(Level.INFO, "UI is dirty.");
+		} else {
+			statsLogger.log(Level.INFO, "UI is clean.");
+		}
 	}
 	
 	/**
@@ -292,5 +362,19 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 */
 	public boolean isDirty() {
 		return isDirty;
+	}
+	
+	private String getControlName(DocumentEvent e) {
+		String ctrl = ((JTextField) e.getDocument().getProperty("owner")).getName();
+		return ctrl;
+	}
+		
+	/**
+	 * Confirm that the values in the GUI are appropriate. If not
+	 * throw an exception and handle it.
+	 * @return
+	 */
+	private boolean isGUIOK() {
+		return true;
 	}
 }
