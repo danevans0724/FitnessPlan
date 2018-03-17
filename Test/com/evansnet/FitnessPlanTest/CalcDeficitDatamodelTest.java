@@ -1,19 +1,23 @@
 package com.evansnet.FitnessPlanTest;
 
-//import static org.junit.Assert.*;
-//import java.util.Calendar;
-//import org.junit.Test;
-/*
+import static org.junit.Assert.*;
+import org.junit.Test;
+
 import com.evansnet.FitnessPlan.BMICalculator;
-import com.evansnet.FitnessPlan.BMICalculator.HEIGHT_UNITS;
-import com.evansnet.FitnessPlan.BMICalculator.MEASUREMENT_SYSTEM;
-import com.evansnet.FitnessPlan.BMICalculator.SEX;
+import com.evansnet.FitnessPlan.FemalePerson;
+import com.evansnet.FitnessPlan.MalePerson;
+import com.evansnet.FitnessPlan.Person;
+import com.evansnet.measurement.ConversionException;
+import com.evansnet.measurement.HEIGHT_UNITS;
+import com.evansnet.measurement.MASS_UNIT;
+import com.evansnet.measurement.MEASUREMENT_SYSTEM;
+import com.evansnet.measurement.MEASUREMENT_TYPE;
+import com.evansnet.measurement.Measurement;
 
 
 public class CalcDeficitDatamodelTest {
+		
 	
-	// TODO: write a test for conversion of centimeters to Meters.
-
 	@Test
 	public void testCalcDefictDatamodel() {
 		BMICalculator d= new BMICalculator();
@@ -21,176 +25,137 @@ public class CalcDeficitDatamodelTest {
 	}
 
 	@Test
-	public void testGetBMIEnglishUnitsTest() {
+	public void testGetBMIENGLISHUnitsTest() {
 		// Test the BMICalculator calculation for a 160lb Male 57 years of age, 5'-5" high.
-		BMICalculator dm = new BMICalculator();
-		dm.setCurrentWeight(Double.valueOf(160));
-		dm.setGender(SEX.Male);
-		dm.setHeight(Double.valueOf((5*12)+5));
+		Person man = new MalePerson();
+		man.setCurrentWeight(Double.valueOf(160));
+		man.setHeight(Double.valueOf((5*12)+5));
 		
-		// Test for English units.
+		// Test for ENGLISH units.
 		try {
-			dm.setUOMSystem (MEASUREMENT_SYSTEM.English);
-			dm.setUnits(HEIGHT_UNITS.INCHES);
-			assertEquals(Double.valueOf(26.6), dm.getBMI(), Double.valueOf(0.09));
+			man.useMeasurementSystem(MEASUREMENT_SYSTEM.ENGLISH);
+			man.hgtUnits(HEIGHT_UNITS.INCHES);
+			man.calcBMI();
+			assertEquals(Double.valueOf(26.6), man.getBMI(), Double.valueOf(0.09));
 		} catch (AssertionError e) {
-			fail("Failed BMICalculator calculation with English units.\n" + 
-					"BMICalculator returned was: " + dm.getBMI().toString());
+			fail("Failed BMICalculator calculation with ENGLISH units.\n" + 
+					"BMICalculator returned was: " + man.getBMI().toString());
 			e.printStackTrace();
 		}		
 	}
 	
 	@Test 
-	public void testGetBMIMetricUnits () {
+	public void testGetBMIMETRICUnits () {
 		// Test the BMICalculator calculation for a 160lb Male 57 years of age, 5'-5" high.
-		BMICalculator dm = new BMICalculator();
-		dm.setCurrentWeight(Double.valueOf(72.5748));
-		dm.setGender(SEX.Male);
-		dm.setHeight(Double.valueOf(165.1));
+		Person man = new MalePerson();
+		man.setCurrentWeight(Double.valueOf(72.5748));
+		man.setHeight(Double.valueOf(165.1));
 
 		try {
-			dm.setUOMSystem(MEASUREMENT_SYSTEM.Metric);
-			dm.setUnits(HEIGHT_UNITS.CENTIMETERS);
-			assertEquals(Double.valueOf(26.6), dm.getBMI(), Double.valueOf(0.09));
+			assertEquals(Double.valueOf(26.6), man.getBMI(), Double.valueOf(0.09));
 		} catch (AssertionError e) {
-			fail("Failed BMICalculator calculation with Metric units.\n" + 
-					"BMICalculator returned was: " + dm.getBMI().toString());
+			fail("Failed BMICalculator calculation with METRIC units.\n" + 
+					"BMICalculator returned was: " + man.getBMI().toString());
 			e.printStackTrace();
 		}
 	}
 	
 	@Test
-	public void GetBMREnglishMaleTest() {
+	public void GetBMRENGLISHMaleTest() {
 		// Test BMR calculation for a 160 lb Male 57 years of age and 5'-5" high.
 		// ref: MEN BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) - (5.677 x age in years)
-		BMICalculator dm = new BMICalculator();
-		dm.setUOMSystem(MEASUREMENT_SYSTEM.English);
-		dm.setCurrentWeight(160.0);
-		dm.setHeight(5.0*12+5);
-		dm.setGender(SEX.Male);
-		Calendar bdCal = Calendar.getInstance();
-		int currentYear = bdCal.get(Calendar.YEAR);
-		int testYear = currentYear - 57;
-		bdCal.set(Calendar.YEAR, testYear);
-		bdCal.set(Calendar.MONTH, 7);
-		bdCal.set(Calendar.DAY_OF_MONTH, 24);		
-		Calendar today = Calendar.getInstance();		
-		dm.setBirthDate(bdCal);
-
+		MalePerson dm = new MalePerson();
+		Measurement m = new Measurement(MEASUREMENT_SYSTEM.ENGLISH, MEASUREMENT_TYPE.MASS);
 		try {
-			assertEquals(Double.valueOf(1529.4), dm.getBMR(), Double.valueOf(0.9));
-		} catch (AssertionError e) {
-			fail("\nTest failed for male BMR calculation using English units\n" + 
-		         "The value returned is: " + dm.getBMR().toString() + 
-		         "\n Age is: " + dm.getCurrentAge() + 
-		         "\n Gender is: " + dm.getGender() + 
-		         "\n Weight is: " + dm.getCurrentWeight() + 
-		         "\n Height is: " + dm.getHeight());
-			
-			
-			e.printStackTrace();
+			dm.setCurrentWeight(m.convertMass(MEASUREMENT_SYSTEM.METRIC, MASS_UNIT.POUNDS, MASS_UNIT.KILOGRAMS, 160.0));
+			dm.setHeight(m.convertDistance(MEASUREMENT_SYSTEM.METRIC, HEIGHT_UNITS.INCHES, HEIGHT_UNITS.CENTIMETERS, 65.0));
+		} catch (ConversionException e1) {
+			e1.printStackTrace();
+			fail("Exception thrown");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			fail("Exception thrown");
 		}
-	}
-
-	@Test
-	public void testGetBMREnglishFemaleTest() {
-		BMICalculator dm = new BMICalculator();
-		dm.setUOMSystem(MEASUREMENT_SYSTEM.English);
-		dm.setCurrentWeight(160.0);
-		dm.setHeight(5.0*12+5);
-		dm.setGender(SEX.Female);
-		Calendar bdCal = Calendar.getInstance();
-		int currentYear = bdCal.get(Calendar.YEAR);
-		int testYear = currentYear - 57;
-		bdCal.set(Calendar.YEAR, testYear);
-		bdCal.set(Calendar.MONTH, 7);
-		bdCal.set(Calendar.DAY_OF_MONTH, 24);		
-		Calendar today = Calendar.getInstance();		
-		dm.setBirthDate(bdCal);
-		try {
-			assertEquals(Double.valueOf(1383.36), dm.getBMR(), Double.valueOf(0.9));
-		} catch (AssertionError e) {
-			fail("Test failed for female BMR calculation using English units\n" + 
-		         "The value returned is: " + dm.getBMR().toString()  + 
-		         "\n Age is: " + dm.getCurrentAge() + 
-		         "\n Gender is: " + dm.getGender() + 
-		         "\n Weight is: " + dm.getCurrentWeight() + 
-		         "\n Height is: " + dm.getHeight());
-			e.printStackTrace();
-		}
-	}
-
-	@Test
-	public void testGetBMRMetricMaleTest() {
-		BMICalculator dm = new BMICalculator();
-		dm.setUOMSystem(MEASUREMENT_SYSTEM.Metric);
-		dm.setUnits(HEIGHT_UNITS.CENTIMETERS);
-		dm.setCurrentWeight(72.5748);
-		dm.setHeight(165.1);
-		dm.setGender(SEX.Male);
-		Calendar bdCal = Calendar.getInstance();
-		int currentYear = bdCal.get(Calendar.YEAR);
-		int testYear = currentYear - 57;
-		bdCal.set(Calendar.YEAR, testYear);
-		bdCal.set(Calendar.MONTH, 7);
-		bdCal.set(Calendar.DAY_OF_MONTH, 24);		
-		Calendar today = Calendar.getInstance();		
-		dm.setBirthDate(bdCal);
+		dm.setAge(57);
 		
 		try {
 			assertEquals(Double.valueOf(1529.4), dm.getBMR(), Double.valueOf(0.9));
 		} catch (AssertionError e) {
-			fail("Test failed for male BMR calculation using Metric units\n" + 
+			fail("\nTest failed for male BMR calculation using ENGLISH units\n" + 
+		         "The value returned is: " + dm.getBMR().toString() + 
+		         "\n Age is: " + dm.getAge() + 
+		         "\n Gender is: " + dm.genderIs() + 
+		         "\n Weight is: " + dm.getCurrentWeight() + 
+		         "\n Height is: " + dm.getHeight());
+			
+			
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testGetBMRENGLISHFemaleTest() {
+		Measurement m = new Measurement(MEASUREMENT_SYSTEM.ENGLISH, MEASUREMENT_TYPE.MASS);
+		FemalePerson dm = new FemalePerson();
+		try {
+			dm.setCurrentWeight(m.convertMass(MEASUREMENT_SYSTEM.METRIC, MASS_UNIT.POUNDS, MASS_UNIT.KILOGRAMS, 160.0));
+			dm.setHeight(m.convertDistance(MEASUREMENT_SYSTEM.METRIC, HEIGHT_UNITS.INCHES, HEIGHT_UNITS.CENTIMETERS, 65.0));
+		} catch (ConversionException e1) {
+			e1.printStackTrace();
+			fail("Measurement conversion failed");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			fail("Measurement conversion failed");
+		}
+		dm.setAge(57);
+		
+		try {
+			assertEquals(Double.valueOf(1383.36), dm.getBMR(), Double.valueOf(0.9));
+		} catch (AssertionError e) {
+			fail("Test failed for female BMR calculation using ENGLISH units\n" + 
+		         "The value returned is: " + dm.getBMR().toString()  + 
+		         "\n Age is: " + dm.getAge() + 
+		         "\n Gender is: " + dm.genderIs() + 
+		         "\n Weight is: " + dm.getCurrentWeight() + 
+		         "\n Height is: " + dm.getHeight());
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testGetBMRMETRICMaleTest() {
+		MalePerson dm = new MalePerson();
+		dm.useMeasurementSystem(MEASUREMENT_SYSTEM.METRIC);
+		dm.hgtUnits(HEIGHT_UNITS.CENTIMETERS);
+		dm.setCurrentWeight(72.5748);
+		dm.setHeight(165.1);
+		dm.setAge(57);
+		
+		try {
+			assertEquals(Double.valueOf(1529.4), dm.getBMR(), Double.valueOf(0.9));
+		} catch (AssertionError e) {
+			fail("Test failed for male BMR calculation using METRIC units\n" + 
 		         "The value returned is: " + dm.getBMR().toString());
 			e.printStackTrace();
 		}
 	}
 
 	@Test
-	public void testGetBMRMetricFemaleMaleTest() {
-		BMICalculator dm = new BMICalculator();
-		dm.setUOMSystem(MEASUREMENT_SYSTEM.Metric);
-		dm.setUnits(HEIGHT_UNITS.CENTIMETERS);
+	public void testGetBMRMETRICFemaleMaleTest() {
+		FemalePerson dm = new FemalePerson();
 		dm.setCurrentWeight(72.5748);
 		dm.setHeight(165.1);
-		dm.setGender(SEX.Female);
-		Calendar bdCal = Calendar.getInstance();
-		int currentYear = bdCal.get(Calendar.YEAR);
-		int testYear = currentYear - 57;
-		bdCal.set(Calendar.YEAR, testYear);
-		bdCal.set(Calendar.MONTH, 7);
-		bdCal.set(Calendar.DAY_OF_MONTH, 24);		
-		Calendar today = Calendar.getInstance();		
-		dm.setBirthDate(bdCal);
+		dm.setAge(57);
 		try {
 			assertEquals(Double.valueOf(1383.36), dm.getBMR(), Double.valueOf(0.9));
 		} catch (AssertionError e) {
-			fail("Test failed for female BMR calculation using Metric units\n" + 
+			fail("Test failed for female BMR calculation using METRIC units\n" + 
 		         "The value returned is: " + dm.getBMR().toString() + 
-		         "\n Age is: " + dm.getCurrentAge() + 
-		         "\n Gender is: " + dm.getGender() + 
+		         "\n Age is: " + dm.getAge() + 
+		         "\n Gender is: " + dm.genderIs() + 
 		         "\n Weight is: " + dm.getCurrentWeight() + 
 		         "\n Height is: " + dm.getHeight());
 			e.printStackTrace();
 		}
 	}
-	
-
-	@Test 
-	public void testGetCurrentAgeEquals57Test() {
-		//Test the calculation of the user's current age.
-		BMICalculator dm = new BMICalculator();
-		Calendar bdCal = Calendar.getInstance();
-		int currentYear = bdCal.get(Calendar.YEAR);
-		int testYear = currentYear - 57;
-		bdCal.set(Calendar.YEAR, testYear);
-		bdCal.set(Calendar.MONTH, 7);
-		bdCal.set(Calendar.DAY_OF_MONTH, 24);
-		
-		Calendar today = Calendar.getInstance();
-		
-		dm.setBirthDate(bdCal);
-		// Debugging line System.out.println("Age returned is: " + dm.getCurrentAge());
-		assertEquals((int) 57, dm.getCurrentAge());
-	}
-}*/
+}

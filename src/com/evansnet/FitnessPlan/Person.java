@@ -1,5 +1,6 @@
 package com.evansnet.FitnessPlan;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import com.evansnet.measurement.HEIGHT_UNITS;
@@ -90,7 +91,7 @@ public class Person implements IPerson, IGender {
 	
 	@Override
 	public boolean isMetric() {
-		if (uomSystem == MEASUREMENT_SYSTEM.Metric)
+		if (uomSystem == MEASUREMENT_SYSTEM.METRIC)
 			return true;
 		return false;
 	}
@@ -146,6 +147,10 @@ public class Person implements IPerson, IGender {
 	}
 	
 	public int getAge() {
+		if (age == 0) {
+			// Age hasn't been set. Calculate it from the birth date.
+			age = calcCurrentAge();
+		}
 		return age;
 	}
 	
@@ -202,9 +207,8 @@ public class Person implements IPerson, IGender {
 	 *@ref MEN BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) - (5.677 x age in years) 
 	 */
 	public void calcBMR(Double[] bmrConst) {
-		this.bmr = bmrConst[1]+(bmrConst[2]*this.getCurrentWeight())+ 
-				(bmrConst[3]*this.getHeight())-(bmrConst[4]*this.getAge());
-		
+		this.bmr = bmrConst[0]+(bmrConst[1]*this.getCurrentWeight())+ 
+				(bmrConst[2]*this.getHeight())-(bmrConst[3]*this.getAge());		
 	}
 
 	/**
@@ -219,7 +223,7 @@ public class Person implements IPerson, IGender {
 	 * person that we are planning for.
 	 */
 	
-	protected void calcBMI() {
+	public void calcBMI() {
 		BMICalculator bmi = new BMICalculator();
 		this.bmi = bmi.calcBMI(this);
 	}

@@ -1,5 +1,7 @@
 package com.evansnet.FitnessPlanTest;
 
+import org.junit.Test;
+
 import com.evansnet.FitnessPlan.FemalePerson;
 import com.evansnet.FitnessPlan.MalePerson;
 import com.evansnet.FitnessPlan.SEX;
@@ -18,9 +20,9 @@ public class CalcDeficitAllTests {
 	UnitsConverter converter;
 	
 	// Input parameters for people use for person tests and unit conversiontests
-	Double weight = 150.0; 		// pounds.
-	Double height = 5.0*12.0+5; // inches.
-	int age = 50;
+	final Double weight = 150.0; 		// pounds.
+	final Double height = 5.0*12.0+5; // inches.
+	final int age = 50;
 	
 	
 	public CalcDeficitAllTests() {
@@ -55,11 +57,12 @@ public class CalcDeficitAllTests {
 		
 	}
 
+	
 	private void setupEnglishMale(MalePerson m) {
 		this.englishMale.setGender(SEX.MALE);
 		this.englishMale.setHeight(this.height);
 		this.englishMale.setCurrentWeight(this.weight);
-		this.englishMale.useMeasurementSystem(MEASUREMENT_SYSTEM.English);
+		this.englishMale.useMeasurementSystem(MEASUREMENT_SYSTEM.ENGLISH);
 	}
 	
 }

@@ -9,14 +9,17 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.ActionListener;
+import java.time.Year;
 
 import com.evansnet.FitnessPlan.FemalePerson;
 import com.evansnet.FitnessPlan.MalePerson;
 import com.evansnet.FitnessPlan.Person;
 import com.evansnet.FitnessPlan.UI.menu.FPMainMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.ScrollPaneLayout;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -36,6 +39,8 @@ public class Fitness extends JFrame implements Observer {
 	ActionListener menuListener;
 	
 	Person thePerson;
+	public static String version = "1.0.0";
+	public static String copyrightYear = Year.now().toString();	
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -71,6 +76,14 @@ public class Fitness extends JFrame implements Observer {
 
 	public void setPersonTree(JTree personTree) {
 		this.personTree = personTree;
+	}
+	
+	/**
+	 * Provides the product version.
+	 * @return A string representing the product version.
+	 */
+	public static String getVersion() {
+		return version;
 	}
 
 	/**
@@ -152,21 +165,37 @@ public class Fitness extends JFrame implements Observer {
 			doDeletePerson();
 			break;
 		case "HELP_CONTENTS":
+			doHelpContents();
 			break;			//Do nothing for now.
 		case "HELP_ABOUT":
-			break;			//TODO: Write the help system and do the help about dialog.
+			doHelpAbout();
+			break;			
 		case "QUIT":
 			doExit();
 			break;
 		}
 	}
 	
+	@SuppressWarnings("static-access")
+	private void doHelpAbout() {
+		String versionStr = "Fitness Planner version " + getVersion();
+		String copyright = "Copyright Dan Evans " + copyrightYear + " . All rights reserved.";
+		final JOptionPane helpAbout = new JOptionPane();
+		helpAbout.showMessageDialog(this, versionStr + "\n" + copyright, 
+				"About Fitness Planner", JOptionPane.OK_OPTION );
+	}
+
+	private void doHelpContents() {
+		// TODO: Create a dialog for help contents and implement it.
+		System.out.println("Creating help contents! ");
+	}
+
 	/**
 	 * Find the person in the system and remove the record. Remove
 	 * the person from the tree.
 	 */
 	private void doDeletePerson() {
-		// TODO Auto-generated method stub
+		// TODO: Call the method in the person panel that deletes the person.
 		System.out.println("Deleting a person!");
 	}
 	
@@ -174,7 +203,7 @@ public class Fitness extends JFrame implements Observer {
 	 * Save the person's data to storage and add the name to the tree.
 	 */
 	private void doSavePerson() {
-		// TODO Auto-generated method stub
+		// TODO: Call the method in the person panel that saves a person. Persist to storage.
 		System.out.println("Saving a person!");
 	}
 	
@@ -184,6 +213,12 @@ public class Fitness extends JFrame implements Observer {
 	private void doGetPerson() {
 		// TODO Auto-generated method stub
 		System.out.println("Getting a person! (From where?)");
+		/* Algorithm:
+		 * 1. Use the person entry from the tree.
+		 * 2. Find the person in storage or the model.
+		 * 3. Use the values in the model to populate the controls. 
+		 *    (Sounds like a great JFace usage to me. Too bad it's Swing)
+		 */
 	}
 
 	/**
@@ -198,18 +233,56 @@ public class Fitness extends JFrame implements Observer {
 	 * Handles the creation of a new person. Synchronizes the model and 
 	 * the display in preparation for the save.
 	 */
+	/*
+	 * Algorithm:
+	 * 1. Get the male/female selection from the GUI.
+	 * 2. Create the appropriate model object.
+	 * 3. Synch the values in the controls, if any, with the new objects.
+	 * 4. Add the person to the tree.
+	 */
 	private void doNewPerson() {
 		if (pPerson.rd_male.isSelected()) {
 			thePerson = new MalePerson();
 		} else if (pPerson.rd_female.isSelected()) {
 			thePerson = new FemalePerson();
 		} 
-		
+		syncModel();
 		
 	}
 	
 	private void syncModel() {
 		System.out.println("Synchronizing the model and GUI.");
+		if (pPerson.isDirty()) {
+			if (pPerson.isPersonExists(pPerson.getName())) {
+				// The person already exists. Update the record with GUI changes
+				thePerson.setName(pPerson.getTxtName());
+				thePerson.setStartWeight(Double.parseDouble(pPerson.getTxtStartWgt()));
+				thePerson.setTargetWeight(Double.parseDouble(pPerson.getTxtTargetWgt()));
+				thePerson.setCurrentWeight(Double.parseDouble(pPerson.getTxtCurrentWgt()));
+				thePerson.setGender(pPerson.getGender());
+				thePerson.setBirthDate(getDateFromString(pPerson.getTxtBirthDate()));
+				thePerson.calcCurrentAge();
+				//TODO: Need to set the age, measurement system etc for the person. 
+			} else {
+				// The person does not exist in the tree. Create a new person object
+				System.out.println("Sync a new Person!");
+			}
+		}
+	}
+
+	/**
+	 * Provides a calendar from a string representation of a date. As of this writing the 
+	 * method assumes that the date is in the form of MM/DD/YYYY. Other formats will cause an error.
+	 * 
+	 * @param dt
+	 * @return
+	 */
+	protected Calendar getDateFromString(String dt) {
+		String[] d = new String[3];
+		d = dt.split("/"); 	// split into MM and DD and YYYY
+		Calendar c = Calendar.getInstance();
+		c.set(Integer.parseInt(d[2]), Integer.parseInt(d[0]), Integer.parseInt(d[2]));
+		return c;
 	}
 	
 }

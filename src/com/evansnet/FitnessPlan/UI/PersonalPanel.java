@@ -11,6 +11,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.evansnet.FitnessPlan.SEX;
+
 import java.awt.Insets;
 
 import javax.swing.ButtonGroup;
@@ -44,6 +46,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	JButton btnOK;
 	boolean isDirty;
 	JButton btnCancel;
+	SEX gender = SEX.MALE;
 	
 	DocumentListener docChgListener;
 	
@@ -251,10 +254,12 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	public void itemStateChanged(ItemEvent genderEvent) {
 		if (genderEvent.getSource() == rd_male) {
 			statsLogger.log(Level.INFO, "Male gender selected");
+			gender = SEX.MALE;
 			setDirty(true);
 			
 		} else if (genderEvent.getSource() == rd_female) {
-			statsLogger.log(Level.INFO, "Female gender selected");	
+			statsLogger.log(Level.INFO, "Female gender selected");
+			gender = SEX.FEMALE;
 			setDirty(true);
 		}
 	}
@@ -280,7 +285,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 * 
 	 * @return True if the person record exists, false otherwise.
 	 */
-	private boolean isPersonExists(String name) {
+	protected boolean isPersonExists(String name) {
 		// TODO Write the routine to check for an existing person in storage. Determines add or edit.
 		return false;
 	}
@@ -331,16 +336,6 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	}
 
 	/**
-	 * Checks the tree and model for the user
-	 * @param text The name of the user to search for
-	 * @return <b>boolean</b>: true if the user is found, false otherwise
-	 */
-	private boolean doCheckExistingUser(String text) {
-		this.getParent();
-		return false;		//TODO: Implement the doCheckExistingUser method.
-	}
-	
-	/**
 	 * If the UI has been updated, set this to true. Binding of data back to the model can be 
 	 * done at that point
 	 * @param b True or False - True if the panel has been edited.
@@ -376,5 +371,45 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 */
 	private boolean isGUIOK() {
 		return true;
+	}
+
+
+	public String getTxtName() {
+		return txtName.getText();
+	}
+
+
+	public String getTxtBirthDate() {
+		return txtBirthDate.getText();
+	}
+
+
+	public String getTxtStartWgt() {
+		return txtStartWgt.getText();
+	}
+
+
+	public String getTxtTargetWgt() {
+		return txtTargetWgt.getText();
+	}
+
+
+	public String getTxtCurrentWgt() {
+		return txtCurrentWgt.getText();
+	}
+	
+	public SEX getGender() {
+		return gender;
+	}
+
+
+	/**
+	 * Checks the tree and model for the user
+	 * @param text The name of the user to search for
+	 * @return <b>boolean</b>: true if the user is found, false otherwise
+	 */
+	private boolean doCheckExistingUser(String text) {
+		this.getParent();
+		return false;		//TODO: Implement the doCheckExistingUser method.
 	}
 }

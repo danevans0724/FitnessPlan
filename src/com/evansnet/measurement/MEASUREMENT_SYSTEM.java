@@ -1,3 +1,6 @@
 package com.evansnet.measurement;
 
-public enum MEASUREMENT_SYSTEM {English, Metric}
+public enum MEASUREMENT_SYSTEM {
+	ENGLISH,
+	METRIC
+	}

@@ -11,7 +11,7 @@ public class MalePerson extends Person {
 	 *@ref MEN BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) - (5.677 x age in years) 
 	 */
 	public MalePerson() {
-		super(SEX.MALE, MEASUREMENT_SYSTEM.Metric, HEIGHT_UNITS.CENTIMETERS);
+		super(SEX.MALE, MEASUREMENT_SYSTEM.METRIC, HEIGHT_UNITS.CENTIMETERS);
 		this.setConstants(BMRCONSTANTS);
 	}
 	

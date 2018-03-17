@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 /**
  * Shows the BMI, and BMR for the person shown in the PersonPanel, (center frame). 
@@ -39,9 +41,8 @@ public class StatsPanel extends JPanel {
 	public void init() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{152, 0};
-		gridBagLayout.rowHeights = new int[]{150, 150, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0};
 		setLayout(gridBagLayout);
 		bmiPanel = new JPanel();
 		bmiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -49,7 +50,8 @@ public class StatsPanel extends JPanel {
 		bmiPanel.add(lblBmi);
 		
 		GridBagConstraints gbc_bmiPanel = new GridBagConstraints();
-		gbc_bmiPanel.fill = GridBagConstraints.BOTH;
+		gbc_bmiPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bmiPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_bmiPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_bmiPanel.gridx = 0;
 		gbc_bmiPanel.gridy = 0;
@@ -58,6 +60,7 @@ public class StatsPanel extends JPanel {
 		txtBmi.setPreferredSize(new Dimension(110, 20));
 		txtBmi.setMinimumSize(new Dimension(80, 20));
 		bmiPanel.add(txtBmi);
+		bmiPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txtBmi}));
 		
 		bmrPanel = new JPanel();
 		lblBmr = new JLabel("BMR: ");
@@ -67,9 +70,12 @@ public class StatsPanel extends JPanel {
 		bmrPanel.add(lblBmr);
 		bmrPanel.add(txtBmr);
 		GridBagConstraints gbc_bmrPanel = new GridBagConstraints();
-		gbc_bmrPanel.fill = GridBagConstraints.BOTH;
+		gbc_bmrPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_bmrPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bmrPanel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_bmrPanel.gridx = 0;
 		gbc_bmrPanel.gridy = 1;
 		this.add(bmrPanel, gbc_bmrPanel);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{bmiPanel, txtBmi, txtBmr}));
 	}
 }

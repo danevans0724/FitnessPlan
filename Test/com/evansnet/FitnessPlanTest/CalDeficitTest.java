@@ -46,7 +46,7 @@ public class CalDeficitTest {
 		}
 		
 		// Now get the BMI
-		person.useMeasurementSystem(MEASUREMENT_SYSTEM.Metric);
+		person.useMeasurementSystem(MEASUREMENT_SYSTEM.METRIC);
 		person.hgtUnits(HEIGHT_UNITS.CENTIMETERS);
 		Double theBmi = person.getBMI();
 		theBmi = ((double)Math.round(theBmi * 100)) / 100; 	// Round to 2 decimals
@@ -63,7 +63,7 @@ public class CalDeficitTest {
 		}
 		
 		// Now test BMI for English units\
-		person.useMeasurementSystem(MEASUREMENT_SYSTEM.English);
+		person.useMeasurementSystem(MEASUREMENT_SYSTEM.ENGLISH);
 		person.setHeight(5.0*12 + 5.0);
 		person.setCurrentWeight(160.0);
 		theBmi = person.getBMI();
