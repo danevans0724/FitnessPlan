@@ -14,7 +14,7 @@ import java.awt.Component;
 /**
  * Shows the BMI, and BMR for the person shown in the PersonPanel, (center frame). 
  * 
- * @author Daniel Evans (C) 2017
+ * @author Daniel Evans (C) 2018
  *
  */
 @SuppressWarnings("serial")

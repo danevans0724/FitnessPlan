@@ -5,7 +5,6 @@ import org.junit.Test;
 import com.evansnet.FitnessPlan.FemalePerson;
 import com.evansnet.FitnessPlan.MalePerson;
 import com.evansnet.FitnessPlan.SEX;
-import com.evansnet.FitnessPlan.UnitsConverter.UnitsConverter;
 import com.evansnet.measurement.MEASUREMENT_SYSTEM;
 
 
@@ -17,18 +16,16 @@ public class CalcDeficitAllTests {
 	MalePerson metricMale;
 	FemalePerson metricFemale;
 	
-	UnitsConverter converter;
 	
 	// Input parameters for people use for person tests and unit conversiontests
 	final Double weight = 150.0; 		// pounds.
-	final Double height = 5.0*12.0+5; // inches.
+	final Double height = 5.0*12.0+5; 	// inches.
 	final int age = 50;
 	
 	
 	public CalcDeficitAllTests() {
 		englishMale = new MalePerson();
 		englishFemale = new FemalePerson();
-		converter = new UnitsConverter();
 	}
 	
 	/**

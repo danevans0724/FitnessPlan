@@ -1,6 +1,5 @@
 package com.evansnet.FitnessPlan;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import com.evansnet.measurement.HEIGHT_UNITS;
@@ -15,7 +14,7 @@ public class Person implements IPerson, IGender {
 	protected Double targetWeight;
 	protected Calendar birthDate;			// The user's birth date.
 	protected Double height;				// The user's height
-	protected int age;					// The user's current age.
+	protected int age;						// The user's current age.
 	protected Double bmr;					// The user's Basal Metabolic Rate
 	protected Double bmi;					// The user's Body Mass Index.
 	

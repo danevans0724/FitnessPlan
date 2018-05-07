@@ -322,7 +322,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 				JOptionPane.showMessageDialog(this, "User already exists in the tree!");
 			} else {
 				DefaultMutableTreeNode newPerson = new DefaultMutableTreeNode();
-				// Fire an add person to the tree event. I need to write the event and listener.
+				//TODO: Fire an add person to the tree event. I need to write the event and listener.
 			}
 		}
 	}
@@ -332,11 +332,12 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 * in the panel's controls.
 	 */
 	private void doUpdatePerson() {
+		System.out.println("Updating the person!");
 		//TODO: Write the doUpdatePerson() method.
 	}
 
 	/**
-	 * If the UI has been updated, set this to true. Binding of data back to the model can be 
+	 * If the UI has been changed, set this to true. Binding of data back to the model can be 
 	 * done at that point
 	 * @param b True or False - True if the panel has been edited.
 	 * 
@@ -370,6 +371,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 * @return
 	 */
 	private boolean isGUIOK() {
+		System.out.println("Checking the GUI for valid values");
 		return true;
 	}
 
@@ -402,7 +404,6 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 		return gender;
 	}
 
-
 	/**
 	 * Checks the tree and model for the user
 	 * @param text The name of the user to search for
@@ -410,6 +411,7 @@ public class PersonalPanel extends JPanel implements ActionListener, ItemListene
 	 */
 	private boolean doCheckExistingUser(String text) {
 		this.getParent();
+		System.out.println("Checking the tree for a person " + text);
 		return false;		//TODO: Implement the doCheckExistingUser method.
 	}
 }
