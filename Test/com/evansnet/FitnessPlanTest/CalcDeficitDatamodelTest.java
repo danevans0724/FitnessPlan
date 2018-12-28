@@ -34,7 +34,7 @@ public class CalcDeficitDatamodelTest {
 		// Test for ENGLISH units.
 		try {
 			man.useMeasurementSystem(MEASUREMENT_SYSTEM.ENGLISH);
-			man.hgtUnits(HEIGHT_UNITS.INCHES);
+			man.setHgtUnits(HEIGHT_UNITS.INCHES);
 			man.calcBMI();
 			assertEquals(Double.valueOf(26.6), man.getBMI(), Double.valueOf(0.09));
 		} catch (AssertionError e) {
@@ -126,7 +126,7 @@ public class CalcDeficitDatamodelTest {
 	public void testGetBMRMETRICMaleTest() {
 		MalePerson dm = new MalePerson();
 		dm.useMeasurementSystem(MEASUREMENT_SYSTEM.METRIC);
-		dm.hgtUnits(HEIGHT_UNITS.CENTIMETERS);
+		dm.setHgtUnits(HEIGHT_UNITS.CENTIMETERS);
 		dm.setCurrentWeight(72.5748);
 		dm.setHeight(165.1);
 		dm.setAge(57);

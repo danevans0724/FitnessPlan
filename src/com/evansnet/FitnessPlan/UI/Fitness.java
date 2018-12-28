@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.time.Year;
 
 import com.evansnet.FitnessPlan.FemalePerson;
+import com.evansnet.FitnessPlan.IPerson;
 import com.evansnet.FitnessPlan.MalePerson;
 import com.evansnet.FitnessPlan.Person;
 import com.evansnet.FitnessPlan.UI.menu.FPMainMenu;
@@ -28,8 +29,10 @@ import javax.swing.JTree;
 
 public class Fitness extends JFrame implements Observer {
 	
+	
+	List<IPerson> people;
 	//Temporary array to fill the tree.
-	List<String> people;
+	List<String> tempPeople;
 	DefaultMutableTreeNode treeRoot;
 	JTree personTree;
 	PersonalPanel pPerson;
@@ -136,12 +139,12 @@ public class Fitness extends JFrame implements Observer {
 	 * create a new person and save the person in the data source.
 	 */
 	private void populateTree() {
-		people = new ArrayList<String>();
-		people.add("Dan");
-		people.add("Jan");
-		people.add("Brett");		
+		tempPeople = new ArrayList<String>();
+		tempPeople.add("Dan");
+		tempPeople.add("Jan");
+		tempPeople.add("Brett");		
 		
-		for(String p : people) {
+		for(String p : tempPeople) {
 			treeRoot.add(new DefaultMutableTreeNode(p));
 		}
 	}
@@ -156,7 +159,7 @@ public class Fitness extends JFrame implements Observer {
 			doNewPerson();
 			break;
 		case "GET_PERSON":
-			doGetPerson();
+			doGetPersonFromTree();
 			break;
 		case "SAVE_PERSON":
 			doSavePerson();
@@ -210,7 +213,7 @@ public class Fitness extends JFrame implements Observer {
 	/**
 	 * Do this when the menu item is selected or when a person is clicked in the tree.
 	 */
-	private void doGetPerson() {
+	private void doGetPersonFromTree() {
 		// TODO Auto-generated method stub
 		System.out.println("Getting a person! (From where?)");
 		/* Algorithm:
@@ -219,6 +222,15 @@ public class Fitness extends JFrame implements Observer {
 		 * 3. Use the values in the model to populate the controls. 
 		 *    (Sounds like a great JFace usage to me. Too bad it's Swing)
 		 */
+	}
+	
+	/**
+	 * Fetch the people records from a CSV file and populate the data model with them.
+	 * 
+	 */
+	private void doFetchPeople() {
+		
+	
 	}
 
 	/**

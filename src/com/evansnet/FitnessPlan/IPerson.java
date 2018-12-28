@@ -30,7 +30,7 @@ public interface IPerson {
 
     public int calcCurrentAge();
     public void useMeasurementSystem(MEASUREMENT_SYSTEM measurmentSystem);
-    public void hgtUnits(HEIGHT_UNITS h);
-    public void activityLvl(ACTIVITY_LEVEL a);
+    public void setHgtUnits(HEIGHT_UNITS h);
+    public void setActivityLvl(ACTIVITY_LEVEL a);
     public boolean isMetric();
 }

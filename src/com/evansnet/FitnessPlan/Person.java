@@ -2,8 +2,29 @@ package com.evansnet.FitnessPlan;
 
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import com.evansnet.measurement.HEIGHT_UNITS;
 import com.evansnet.measurement.MEASUREMENT_SYSTEM;
+
+@XmlType( propOrder = {"name",
+		 "gender",
+		 "dateOfBirth",
+		 "age",
+		 "height",
+		 "start_weight",
+		 "target_weight",
+		 "current_weight",
+		 "uom_system",
+		 "units",
+		 "activity_lvl",
+		 "bmi",
+		 "bmr"
+		 } )
+@XmlRootElement(name = "PERSON")
+
 
 public class Person implements IPerson, IGender {
 
@@ -54,7 +75,7 @@ public class Person implements IPerson, IGender {
 		setAge(currentAge);
 		return currentAge;
 	}
-	
+
 	public Double getWeight() {
 		return currentWeight;
 	}
@@ -177,12 +198,14 @@ public class Person implements IPerson, IGender {
 	}
 
 	@Override
-	public void hgtUnits(HEIGHT_UNITS h) {
+	@XmlElement (name = "UNITS")
+	public void setHgtUnits(HEIGHT_UNITS h) {
 		units = h;
 	}
 
 	@Override
-	public void activityLvl(ACTIVITY_LEVEL a) {
+	@XmlElement (name = "ACTIVITY_LEVEL")
+	public void setActivityLvl(ACTIVITY_LEVEL a) {
 		activityLvl = a;
 	}
 
