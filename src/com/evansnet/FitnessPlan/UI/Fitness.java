@@ -24,6 +24,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JTree;
 
@@ -44,9 +46,12 @@ public class Fitness extends JFrame implements Observer {
 	Person thePerson;
 	public static String version = "1.0.0";
 	public static String copyrightYear = Year.now().toString();	
+	public static Logger fitnessLogger = Logger.getLogger(Fitness.class.getName());
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	
+	
 
 	/**
 	 * Launch the Fitness application.
@@ -190,7 +195,7 @@ public class Fitness extends JFrame implements Observer {
 
 	private void doHelpContents() {
 		// TODO: Create a dialog for help contents and implement it.
-		System.out.println("Creating help contents! ");
+		fitnessLogger.log(Level.INFO, "Creating help contents! ");
 	}
 
 	/**
@@ -199,7 +204,7 @@ public class Fitness extends JFrame implements Observer {
 	 */
 	private void doDeletePerson() {
 		// TODO: Call the method in the person panel that deletes the person.
-		System.out.println("Deleting a person!");
+		fitnessLogger.log(Level.INFO,"Deleting a person!");
 	}
 	
 	/** 
@@ -207,7 +212,7 @@ public class Fitness extends JFrame implements Observer {
 	 */
 	private void doSavePerson() {
 		// TODO: Call the method in the person panel that saves a person. Persist to storage.
-		System.out.println("Saving a person!");
+		fitnessLogger.log(Level.INFO,"Saving a person!");
 	}
 	
 	/**
@@ -215,7 +220,7 @@ public class Fitness extends JFrame implements Observer {
 	 */
 	private void doGetPersonFromTree() {
 		// TODO Auto-generated method stub
-		System.out.println("Getting a person! (From where?)");
+		fitnessLogger.log(Level.INFO, "Getting a person! (From where?)");
 		/* Algorithm:
 		 * 1. Use the person entry from the tree.
 		 * 2. Find the person in storage or the model.
@@ -263,7 +268,7 @@ public class Fitness extends JFrame implements Observer {
 	}
 	
 	private void syncModel() {
-		System.out.println("Synchronizing the model and GUI.");
+		fitnessLogger.log(Level.INFO,"Synchronizing the model and GUI.");
 		if (pPerson.isDirty()) {
 			if (pPerson.isPersonExists(pPerson.getName())) {
 				// The person already exists. Update the record with GUI changes
@@ -276,8 +281,8 @@ public class Fitness extends JFrame implements Observer {
 				thePerson.calcCurrentAge();
 				//TODO: Need to set the age, measurement system etc for the person. 
 			} else {
-				// The person does not exist in the tree. Create a new person object
-				System.out.println("Sync a new Person!");
+				// The person does not exist in the tree. Add the new person object to the tree.
+				fitnessLogger.log(Level.INFO,"Sync a new Person!");
 			}
 		}
 	}
